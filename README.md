@@ -1,7 +1,7 @@
 ByteNom
 =======
 
-Simple to use protocol for client server communication.
+A simple to use protocol for client/server communication.
 
 
 ## Client

@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace ByteNom.Demo
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main()
         {
             // Start a server
             var server = new Server(12345);
@@ -19,13 +16,13 @@ namespace ByteNom.Demo
             var client = new Client("localhost", 12345);
             client.MessageReceived += client_MessageReceived;
             client.Connect();
-            client.Send("hello world");
+            client.Send("hello world", "this is a message argument", 10);
 
             Thread.Sleep(Timeout.Infinite);
         }
 
         // Called whenever our client receives a message
-        static void client_MessageReceived(object sender, Message message)
+        private static void client_MessageReceived(object sender, Message message)
         {
             if (message.Type == "HAI")
             {
@@ -34,18 +31,20 @@ namespace ByteNom.Demo
         }
 
         // Called whenever our server receives a new connection
-        static void server_ConnectionReceived(object sender, Connection connection)
+        private static void server_ConnectionReceived(object sender, Connection connection)
         {
             connection.MessageReceived += connection_MessageReceived;
             connection.Send("HAI");
         }
 
         // Called whenever a client sends a message to our server
-        static void connection_MessageReceived(object sender, Message message)
+        private static void connection_MessageReceived(object sender, Message message)
         {
             if (message.Type == "hello world")
             {
-                Console.WriteLine("hello world message received from server!");
+                Console.WriteLine("hello world message received from client!");
+                Console.WriteLine(message.GetString(0));
+                Console.WriteLine("The number was: " + message.GetInt(1));
             }
         }
     }

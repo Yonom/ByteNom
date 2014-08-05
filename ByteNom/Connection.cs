@@ -7,7 +7,7 @@ using ProtoBuf;
 namespace ByteNom
 {
     /// <summary>
-    /// Represents the abstract base class for all ByteNom connections.
+    ///     Represents the abstract base class for all ByteNom connections.
     /// </summary>
     public abstract class Connection : IDisposable
     {
@@ -16,32 +16,23 @@ namespace ByteNom
         private Thread _thread;
 
         /// <summary>
-        /// Gets the tcp client.
+        ///     Gets the tcp client.
         /// </summary>
         /// <value>
-        /// The tcp client.
+        ///     The tcp client.
         /// </value>
         protected TcpClient Client { get; private set; }
 
         /// <summary>
-        /// Gets the network stream.
+        ///     Gets the network stream.
         /// </summary>
         /// <value>
-        /// The network stream.
+        ///     The network stream.
         /// </value>
         protected NetworkStream Stream { get; private set; }
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Sets the internal tcp client for this connection.
+        ///     Sets the internal tcp client for this connection.
         /// </summary>
         /// <param name="client">The client.</param>
         protected void SetClient(TcpClient client)
@@ -51,7 +42,7 @@ namespace ByteNom
         }
 
         /// <summary>
-        /// Starts listening for messages.
+        ///     Starts listening for messages.
         /// </summary>
         protected void Start()
         {
@@ -69,31 +60,34 @@ namespace ByteNom
             {
                 this.Work();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex);
             }
             finally
             {
+                this.Disconnect();
                 this.OnDisconnected();
             }
         }
 
         /// <summary>
-        /// This method is run from the external thread of the connection. Override this to perform startup/shutdown tasks.
+        ///     This method is run from the external thread of the connection. Override this to perform startup/shutdown tasks.
         /// </summary>
         protected virtual void Work()
         {
             while (!this._stopping)
             {
                 var dataMsg = this.ProtoGet<DataMessage>();
-                Message msg = MessageSerializer.Deserialize(dataMsg);
-                this.OnMessageReceived(msg);
+                if (dataMsg != null)
+                {
+                    Message msg = MessageSerializer.Deserialize(dataMsg);
+                    this.OnMessageReceived(msg);
+                }
             }
         }
 
         /// <summary>
-        /// Creates and sends a message with the specified data.
+        ///     Creates and sends a message with the specified data.
         /// </summary>
         /// <param name="type">The message type.</param>
         /// <param name="args">The message arguments.</param>
@@ -103,13 +97,22 @@ namespace ByteNom
         }
 
         /// <summary>
-        /// Sends the specified message.
+        ///     Sends the specified message.
         /// </summary>
         /// <param name="message">The message.</param>
         public void Send(Message message)
         {
             DataMessage dataMsg = MessageSerializer.Serialize(message);
             this.ProtoSend(dataMsg);
+        }
+
+        /// <summary>
+        ///     Disconnects from the server.
+        /// </summary>
+        public void Disconnect()
+        {
+            this.Stream.Close();
+            this.Client.Close();
         }
 
         internal T ProtoGet<T>()
@@ -123,12 +126,12 @@ namespace ByteNom
         }
 
         /// <summary>
-        /// Occurs when a message is received.
+        ///     Occurs when a message is received.
         /// </summary>
         public event MessageEventHandler MessageReceived;
 
         /// <summary>
-        /// Called when a message is received.
+        ///     Called when a message is received.
         /// </summary>
         /// <param name="message">The message.</param>
         protected virtual void OnMessageReceived(Message message)
@@ -138,23 +141,32 @@ namespace ByteNom
         }
 
         /// <summary>
-        /// Occurs when the connection is lost.
+        ///     Occurs when the connection is lost.
         /// </summary>
         public event EventHandler Disconnected;
 
         /// <summary>
-        /// Called when the connection is lost.
+        ///     Called when the connection is lost.
         /// </summary>
         protected virtual void OnDisconnected()
         {
             EventHandler handler = this.Disconnected;
             if (handler != null) handler(this, EventArgs.Empty);
+        }    
+    
+        void IDisposable.Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
-        /// Releases unmanaged and - optionally - managed resources.
+        ///     Releases unmanaged and - optionally - managed resources.
         /// </summary>
-        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        /// <param name="disposing">
+        ///     <c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only
+        ///     unmanaged resources.
+        /// </param>
         protected virtual void Dispose(bool disposing)
         {
             if (this._disposed) return;
@@ -163,8 +175,7 @@ namespace ByteNom
             if (disposing)
             {
                 this._stopping = true;
-                this.Stream.Close();
-                this.Client.Close();
+                this.Disconnect();
             }
         }
     }

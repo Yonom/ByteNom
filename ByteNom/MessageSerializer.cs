@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using ByteNom.Protocol;
 using ProtoBuf.Meta;
@@ -50,7 +48,7 @@ namespace ByteNom
                     return Deserialize(dataItem.Value);
 
                 return di.Value;
-            }));
+            }).ToArray());
         }
     }
 }

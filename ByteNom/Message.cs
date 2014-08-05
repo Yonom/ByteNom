@@ -4,19 +4,19 @@ using System.Collections.Generic;
 namespace ByteNom
 {
     /// <summary>
-    /// The message class.
+    ///     The message class.
     /// </summary>
     public class Message : List<object>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Message"/> class.
+        ///     Initializes a new instance of the <see cref="Message" /> class.
         /// </summary>
         public Message()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Message"/> class.
+        ///     Initializes a new instance of the <see cref="Message" /> class.
         /// </summary>
         /// <param name="type">The message type.</param>
         /// <param name="args">The message arguments.</param>
@@ -25,17 +25,17 @@ namespace ByteNom
             this.Type = type;
             this.AddRange(args);
         }
-        
+
         /// <summary>
-        /// Gets or sets the message type.
+        ///     Gets or sets the message type.
         /// </summary>
         /// <value>
-        /// The message type.
+        ///     The message type.
         /// </value>
         public string Type { get; set; }
 
         /// <summary>
-        /// Gets the argument at the specified index.
+        ///     Gets the argument at the specified index.
         /// </summary>
         /// <typeparam name="T">The type of the argument.</typeparam>
         /// <param name="index">The index.</param>
@@ -46,7 +46,7 @@ namespace ByteNom
         }
 
         /// <summary>
-        /// Gets the bool at the specified index.
+        ///     Gets the bool at the specified index.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
@@ -56,7 +56,7 @@ namespace ByteNom
         }
 
         /// <summary>
-        /// Gets the int at the specified index.
+        ///     Gets the int at the specified index.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
@@ -66,7 +66,7 @@ namespace ByteNom
         }
 
         /// <summary>
-        /// Gets the uint at the specified index.
+        ///     Gets the uint at the specified index.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
@@ -76,7 +76,7 @@ namespace ByteNom
         }
 
         /// <summary>
-        /// Gets the short at the specified index.
+        ///     Gets the short at the specified index.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
@@ -86,7 +86,7 @@ namespace ByteNom
         }
 
         /// <summary>
-        /// Gets the ushort at the specified index.
+        ///     Gets the ushort at the specified index.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
@@ -96,7 +96,7 @@ namespace ByteNom
         }
 
         /// <summary>
-        /// Gets the long at the specified index.
+        ///     Gets the long at the specified index.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
@@ -106,7 +106,7 @@ namespace ByteNom
         }
 
         /// <summary>
-        /// Gets the ulong at the specified index.
+        ///     Gets the ulong at the specified index.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
@@ -116,7 +116,7 @@ namespace ByteNom
         }
 
         /// <summary>
-        /// Gets the byte at the specified index.
+        ///     Gets the byte at the specified index.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
@@ -126,7 +126,7 @@ namespace ByteNom
         }
 
         /// <summary>
-        /// Gets the sbyte at the specified index.
+        ///     Gets the sbyte at the specified index.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
@@ -136,7 +136,7 @@ namespace ByteNom
         }
 
         /// <summary>
-        /// Gets the char at the specified index.
+        ///     Gets the char at the specified index.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
@@ -146,7 +146,7 @@ namespace ByteNom
         }
 
         /// <summary>
-        /// Gets the string at the specified index.
+        ///     Gets the string at the specified index.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
@@ -156,7 +156,7 @@ namespace ByteNom
         }
 
         /// <summary>
-        /// Gets the double at the specified index.
+        ///     Gets the double at the specified index.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
@@ -166,7 +166,7 @@ namespace ByteNom
         }
 
         /// <summary>
-        /// Gets the float at the specified index.
+        ///     Gets the float at the specified index.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
@@ -176,7 +176,7 @@ namespace ByteNom
         }
 
         /// <summary>
-        /// Gets the decimal at the specified index.
+        ///     Gets the decimal at the specified index.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
@@ -186,13 +186,23 @@ namespace ByteNom
         }
 
         /// <summary>
-        /// Gets the DateTime at the specified index.
+        ///     Gets the DateTime at the specified index.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
         public DateTime GetDateTime(int index)
         {
             return this.Get<DateTime>(index);
+        }
+
+        /// <summary>
+        ///     Gets the nested message at the specified index.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns></returns>
+        public Message GetMessage(int index)
+        {
+            return this.Get<Message>(index);
         }
     }
 }

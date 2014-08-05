@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using ByteNom.Protocol;
 using ProtoBuf.Meta;
 
 namespace ByteNom
@@ -8,7 +8,7 @@ namespace ByteNom
     /// <summary>
     ///     Handles the Serialization of the messages.
     /// </summary>
-    public static class Serializer
+    public static class MessageSerializer
     {
         /// <summary>
         ///     Registers a type. Use this method before sending custom classes.
@@ -27,9 +27,26 @@ namespace ByteNom
             RuntimeTypeModel.Default.Add(typeof(DataItem), true).AddSubType(tag, type);
         }
 
-        internal static IEnumerable<DataItem> Serialize(Message message)
+        internal static DataMessage Serialize(Message message)
         {
-            return message.Select(DataItem.CreateDynamic);
+            return new DataMessage(
+                message.Type, 
+                message.Select(DataItem.CreateDynamic).ToArray());
+        }
+
+        internal static Message Deserialize(DataMessage message)
+        {
+            return new Message(
+                message.Type,
+                message.Arguments.Select(di =>
+                {
+                    // Handle nested messages
+                    var dataItem = di as DataItem<DataMessage>;
+                    if (dataItem != null)
+                        return Deserialize(dataItem.Value);
+
+                    return di.Value;
+                }));
         }
     }
 }

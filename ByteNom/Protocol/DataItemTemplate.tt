@@ -9,6 +9,7 @@
 		"int", 
 		"bool", 
 		"double", 
+		"DataMessage",
 
 		"uint",
 		"short", 
@@ -25,19 +26,13 @@
 #>
 using System;
 using ProtoBuf;
-using System.Collections.Generic;
 
-namespace ByteNom
+namespace ByteNom.Protocol
 {
     [
         // Basic classes
 <# foreach (string type in types) { #>
 		ProtoInclude(<#= counter++ #>, typeof(DataItem<<#= type #>>)),
-<# } #>
-        
-        // Lists
-<# foreach (string type in types) { #>
-		ProtoInclude(<#= counter++ #>, typeof(DataItem<List<<#= type #>>>)),
 <# } #>
         
         // Arrays

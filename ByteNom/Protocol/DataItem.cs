@@ -5,7 +5,6 @@ using ProtoBuf;
 namespace ByteNom.Protocol
 {
     [ProtoContract]
-    [ProtoInclude(3, typeof(List<DataItem>))]
     internal abstract partial class DataItem
     {
         public object Value

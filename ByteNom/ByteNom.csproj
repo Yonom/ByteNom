@@ -20,6 +20,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\ByteNom.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="protobuf-net">
@@ -44,25 +47,27 @@
   <ItemGroup>
     <Compile Include="Client.cs" />
     <Compile Include="Connection.cs" />
-    <Compile Include="DataItem.cs">
+    <Compile Include="Protocol\DataItem.cs">
       <LastGenOutput>DataItem1.cs</LastGenOutput>
     </Compile>
-    <Compile Include="DataItemTemplate1.cs">
+    <Compile Include="Protocol\DataItemTemplate1.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DataItemTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Hello.cs" />
+    <Compile Include="Protocol\DataMessage.cs" />
+    <Compile Include="Protocol\Hello.cs" />
     <Compile Include="Message.cs" />
-    <Compile Include="Serializer.cs" />
+    <Compile Include="MessageSerializer.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServerConnection.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="DataItemTemplate.tt">
+    <None Include="Protocol\DataItemTemplate.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DataItemTemplate1.cs</LastGenOutput>
     </None>

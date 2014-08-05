@@ -26,18 +26,11 @@ namespace ByteNom
         /// <summary>
         /// Starts this instance and connects to the server.
         /// </summary>
-        public void Start()
+        public void Connect()
         {
-            this.Start(new TcpClient(this._hostname, this._port));
-        }
-
-        /// <summary>
-        /// This method is run from the external thread of the connection. Override this to perform startup/shutdown tasks.
-        /// </summary>
-        protected override void Work()
-        {
+            this.SetClient(new TcpClient(this._hostname, this._port));
             this.ProtoSend(new Hello());
-            base.Work();
+            this.Start();
         }
     }
 }

@@ -6,16 +6,14 @@ namespace ByteNom
 {
     internal class ServerConnection : Connection
     {
-        private readonly TcpClient _client;
-
         public ServerConnection(TcpClient client)
         {
-            this._client = client;
+            this.SetClient(client);
         }
 
-        public void Start()
+        public new void Start()
         {
-            this.Start(this._client);
+            base.Start();
         }
 
         protected override void Work()

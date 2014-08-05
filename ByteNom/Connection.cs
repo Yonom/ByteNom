@@ -41,13 +41,20 @@ namespace ByteNom
         }
 
         /// <summary>
-        /// Starts listening to the specified client.
+        /// Sets the internal tcp client for this connection.
         /// </summary>
         /// <param name="client">The client.</param>
-        protected void Start(TcpClient client)
+        protected void SetClient(TcpClient client)
         {
             this.Client = client;
             this.Stream = client.GetStream();
+        }
+
+        /// <summary>
+        /// Starts listening for messages.
+        /// </summary>
+        protected void Start()
+        {
             this._thread = new Thread(this.ThreadRun)
             {
                 Name = "ByteNom.Connection",
@@ -62,13 +69,13 @@ namespace ByteNom
             {
                 this.Work();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO: Log the error
+                Console.WriteLine(ex);
             }
             finally
             {
-                this.OnDisconnect();
+                this.OnDisconnected();
             }
         }
 
@@ -81,7 +88,7 @@ namespace ByteNom
             {
                 var dataMsg = this.ProtoGet<DataMessage>();
                 Message msg = MessageSerializer.Deserialize(dataMsg);
-                this.OnMessage(msg);
+                this.OnMessageReceived(msg);
             }
         }
 
@@ -118,29 +125,29 @@ namespace ByteNom
         /// <summary>
         /// Occurs when a message is received.
         /// </summary>
-        public event MessageEventHandler Message;
+        public event MessageEventHandler MessageReceived;
 
         /// <summary>
         /// Called when a message is received.
         /// </summary>
         /// <param name="message">The message.</param>
-        protected virtual void OnMessage(Message message)
+        protected virtual void OnMessageReceived(Message message)
         {
-            MessageEventHandler handler = this.Message;
+            MessageEventHandler handler = this.MessageReceived;
             if (handler != null) handler(this, message);
         }
 
         /// <summary>
         /// Occurs when the connection is lost.
         /// </summary>
-        public event EventHandler Disconnect;
+        public event EventHandler Disconnected;
 
         /// <summary>
         /// Called when the connection is lost.
         /// </summary>
-        protected virtual void OnDisconnect()
+        protected virtual void OnDisconnected()
         {
-            EventHandler handler = this.Disconnect;
+            EventHandler handler = this.Disconnected;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 

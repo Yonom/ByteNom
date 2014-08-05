@@ -78,6 +78,7 @@ namespace ByteNom
         public void Stop()
         {
             this._stopping = true;
+            this._listener.Stop();
         }
 
         private void Work()
@@ -88,12 +89,12 @@ namespace ByteNom
                 {
                     TcpClient client = this._listener.AcceptTcpClient();
                     var connection = new ServerConnection(client);
-                    this.OnConnection(connection);
+                    this.OnConnectionReceived(connection);
                     connection.Start();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    // TODO: Log the error
+                    Console.WriteLine(ex);
                 }
             }
         }
@@ -101,15 +102,15 @@ namespace ByteNom
         /// <summary>
         /// Occurs when a new connection is received.
         /// </summary>
-        public event ConnectionEventHandler Connection;
+        public event ConnectionEventHandler ConnectionReceived;
 
         /// <summary>
-        /// Called whena new connection is received.
+        /// Called when a new connection is received.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        protected virtual void OnConnection(Connection connection)
+        protected virtual void OnConnectionReceived(Connection connection)
         {
-            ConnectionEventHandler handler = this.Connection;
+            ConnectionEventHandler handler = this.ConnectionReceived;
             if (handler != null) handler(this, connection);
         }
 
@@ -124,8 +125,7 @@ namespace ByteNom
 
             if (disposing)
             {
-                this._stopping = true;
-                this._listener.Stop();
+                this.Stop();
             }
         }
     }

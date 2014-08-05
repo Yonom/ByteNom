@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using ByteNom.Protocol;
 using ProtoBuf.Meta;
@@ -36,17 +38,19 @@ namespace ByteNom
 
         internal static Message Deserialize(DataMessage message)
         {
-            return new Message(
-                message.Type,
-                message.Arguments.Select(di =>
-                {
-                    // Handle nested messages
-                    var dataItem = di as DataItem<DataMessage>;
-                    if (dataItem != null)
-                        return Deserialize(dataItem.Value);
+            // If there are no arguments
+            if (message.Arguments == null)
+                return new Message(message.Type);
 
-                    return di.Value;
-                }));
+            return new Message(message.Type, message.Arguments.Select(di =>
+            {
+                // Handle nested messages
+                var dataItem = di as DataItem<DataMessage>;
+                if (dataItem != null)
+                    return Deserialize(dataItem.Value);
+
+                return di.Value;
+            }));
         }
     }
 }

@@ -78,11 +78,8 @@ namespace ByteNom
             while (!this._stopping)
             {
                 var dataMsg = this.ProtoGet<DataMessage>();
-                if (dataMsg != null)
-                {
-                    Message msg = MessageSerializer.Deserialize(dataMsg);
-                    this.OnMessageReceived(msg);
-                }
+                Message msg = MessageSerializer.Deserialize(dataMsg);
+                this.OnMessageReceived(msg);
             }
         }
 

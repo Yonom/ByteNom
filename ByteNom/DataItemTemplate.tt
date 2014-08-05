@@ -1,0 +1,51 @@
+﻿<#@ template hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+<# 
+    var counter = 5;
+    var types = new[] 
+	{
+        // Most used types first
+		"string",
+		"int", 
+		"bool", 
+		"double", 
+
+		"uint",
+		"short", 
+		"ushort",
+		"long", 
+		"ulong",
+		"byte", 
+		"sbyte",
+		"char", 
+		"float",
+		"decimal", 
+		"DateTime",
+	}; 
+#>
+using System;
+using ProtoBuf;
+using System.Collections.Generic;
+
+namespace ByteNom
+{
+    [
+        // Basic classes
+<# foreach (string type in types) { #>
+		ProtoInclude(<#= counter++ #>, typeof(DataItem<<#= type #>>)),
+<# } #>
+        
+        // Lists
+<# foreach (string type in types) { #>
+		ProtoInclude(<#= counter++ #>, typeof(DataItem<List<<#= type #>>>)),
+<# } #>
+        
+        // Arrays
+<# foreach (string type in types) { #>
+		ProtoInclude(<#= counter++ #>, typeof(DataItem<<#= type #>[]>)),
+<# } #>
+    ]
+    partial class DataItem
+	{
+    }
+}

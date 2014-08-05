@@ -5,7 +5,8 @@ using System.Text;
 
 namespace ByteNom
 {
-    public class Class1
+    public class Server
     {
+
     }
 }

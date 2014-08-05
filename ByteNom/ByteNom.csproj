@@ -52,6 +52,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DataItemTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Include="Hello.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Serializer.cs" />
     <Compile Include="Server.cs" />

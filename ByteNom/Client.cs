@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using ByteNom.Protocol;
 
 namespace ByteNom
@@ -17,7 +16,7 @@ namespace ByteNom
 
         public void Start()
         {
-            this.Start(new TcpClient(_hostname, _port));
+            this.Start(new TcpClient(this._hostname, this._port));
         }
 
         protected override void Work()

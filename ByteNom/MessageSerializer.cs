@@ -30,7 +30,7 @@ namespace ByteNom
         internal static DataMessage Serialize(Message message)
         {
             return new DataMessage(
-                message.Type, 
+                message.Type,
                 message.Select(DataItem.CreateDynamic).ToArray());
         }
 

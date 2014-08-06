@@ -17,6 +17,8 @@ namespace ByteNom.Demo
             client.MessageReceived += client_MessageReceived;
             client.Connect();
             client.Send("hello world", "this is a message argument", 10);
+            Thread.Sleep(100);
+            client.Disconnect();
 
             Thread.Sleep(Timeout.Infinite);
         }
@@ -34,7 +36,11 @@ namespace ByteNom.Demo
         private static void server_ConnectionReceived(object sender, Connection connection)
         {
             connection.MessageReceived += connection_MessageReceived;
-            connection.Send("HAI");
+
+            while (true)
+            {
+                connection.Send("HAI");
+            }
         }
 
         // Called whenever a client sends a message to our server

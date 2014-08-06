@@ -16,6 +16,17 @@ namespace ByteNom
         private Thread _thread;
 
         /// <summary>
+        /// Gets a value indicating whether this <see cref="Connection"/> is connected.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if connected; otherwise, <c>false</c>.
+        /// </value>
+        public bool Connected
+        {
+            get { return this.Client.Connected; }
+        }
+
+        /// <summary>
         ///     Gets the tcp client.
         /// </summary>
         /// <value>
@@ -60,6 +71,7 @@ namespace ByteNom
             {
                 this.Work();
             }
+// ReSharper disable once EmptyGeneralCatchClause
             catch (Exception)
             {
             }
@@ -105,6 +117,7 @@ namespace ByteNom
             {
                 this.ProtoSend(dataMsg);
             }
+// ReSharper disable once EmptyGeneralCatchClause
             catch (Exception)
             {
             }

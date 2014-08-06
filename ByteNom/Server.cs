@@ -46,6 +46,15 @@ namespace ByteNom
         }
 
         /// <summary>
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        void IDisposable.Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
         ///     Starts listening to new connections.
         /// </summary>
         /// <exception cref="InvalidOperationException">The server has already been started!</exception>
@@ -84,7 +93,9 @@ namespace ByteNom
                     connection.Start();
                 }
 // ReSharper disable once EmptyGeneralCatchClause
-                catch (Exception) { }
+                catch (Exception)
+                {
+                }
             }
         }
 
@@ -101,15 +112,6 @@ namespace ByteNom
         {
             ConnectionEventHandler handler = this.ConnectionReceived;
             if (handler != null) handler(this, connection);
-        }
-
-        /// <summary>
-        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        void IDisposable.Dispose()
-        {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
         }
 
         /// <summary>

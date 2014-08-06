@@ -24,7 +24,8 @@ namespace ByteNom
             if (tag < 100)
                 throw new ArgumentException("Tags under 100 are reserved!");
 
-            RuntimeTypeModel.Default.Add(typeof(DataItem), true).AddSubType(tag, typeof(DataItem<>).MakeGenericType(type));
+            RuntimeTypeModel.Default.Add(typeof(DataItem), true)
+                .AddSubType(tag, typeof(DataItem<>).MakeGenericType(type));
         }
 
         internal static DataMessage Serialize(Message message)

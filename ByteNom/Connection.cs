@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using ByteNom.Protocol;
@@ -16,14 +17,37 @@ namespace ByteNom
         private Thread _thread;
 
         /// <summary>
-        /// Gets a value indicating whether this <see cref="Connection"/> is connected.
+        ///     Gets a value indicating whether this <see cref="Connection" /> is connected.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if connected; otherwise, <c>false</c>.
+        ///     <c>true</c> if connected; otherwise, <c>false</c>.
         /// </value>
         public bool Connected
         {
-            get { return this.Client.Connected; }
+            get
+            {
+                if (this.Client == null)
+                    return false;
+
+                return this.Client.Connected;
+            }
+        }
+
+        /// <summary>
+        ///     Gets the remote end point.
+        /// </summary>
+        /// <value>
+        ///     The remote end point.
+        /// </value>
+        public EndPoint EndPoint
+        {
+            get
+            {
+                if (this.Client == null)
+                    return null;
+
+                return this.Client.Client.RemoteEndPoint;
+            }
         }
 
         /// <summary>
@@ -41,6 +65,12 @@ namespace ByteNom
         ///     The network stream.
         /// </value>
         protected NetworkStream Stream { get; private set; }
+
+        void IDisposable.Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
         /// <summary>
         ///     Sets the internal tcp client for this connection.
@@ -169,12 +199,6 @@ namespace ByteNom
         {
             EventHandler handler = this.Disconnected;
             if (handler != null) handler(this, EventArgs.Empty);
-        }    
-    
-        void IDisposable.Dispose()
-        {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
         }
 
         /// <summary>

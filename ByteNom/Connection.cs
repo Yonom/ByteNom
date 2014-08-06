@@ -158,9 +158,9 @@ namespace ByteNom
                 if (!this.Connected) return;
                 this.ProtoSend(dataMsg);
             }
-// ReSharper disable once EmptyGeneralCatchClause
             catch (IOException)
             {
+                this.Disconnect();
             }
         }
 

@@ -17,6 +17,7 @@ namespace ByteNom.Demo
             client.MessageReceived += client_MessageReceived;
             client.Connect();
             client.Send("hello world", "this is a message argument", 10);
+            client.Disconnect();
 
             Thread.Sleep(Timeout.Infinite);
         }

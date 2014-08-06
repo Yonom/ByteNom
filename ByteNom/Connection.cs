@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -13,7 +14,6 @@ namespace ByteNom
     public abstract class Connection : IDisposable
     {
         private bool _disposed;
-        private bool _stopping;
         private Thread _thread;
 
         /// <summary>
@@ -101,9 +101,15 @@ namespace ByteNom
             {
                 this.Work();
             }
-// ReSharper disable once EmptyGeneralCatchClause
-            catch (Exception)
+            catch (IOException)
             {
+            }
+            catch (SocketException)
+            {
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
             finally
             {
@@ -117,9 +123,13 @@ namespace ByteNom
         /// </summary>
         protected virtual void Work()
         {
-            while (!this._stopping)
+            while (this.Connected)
             {
                 var dataMsg = this.ProtoGet<DataMessage>();
+
+                // If we received 0 bytes, the connection is closed
+                if (dataMsg == null) break;
+
                 Message msg = MessageSerializer.Deserialize(dataMsg);
                 this.OnMessageReceived(msg);
             }
@@ -145,10 +155,11 @@ namespace ByteNom
 
             try
             {
+                if (!this.Connected) return;
                 this.ProtoSend(dataMsg);
             }
 // ReSharper disable once EmptyGeneralCatchClause
-            catch (Exception)
+            catch (IOException)
             {
             }
         }
@@ -215,7 +226,6 @@ namespace ByteNom
 
             if (disposing)
             {
-                this._stopping = true;
                 this.Disconnect();
             }
         }

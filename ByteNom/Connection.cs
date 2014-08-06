@@ -100,7 +100,14 @@ namespace ByteNom
         public void Send(Message message)
         {
             DataMessage dataMsg = MessageSerializer.Serialize(message);
-            this.ProtoSend(dataMsg);
+
+            try
+            {
+                this.ProtoSend(dataMsg);
+            }
+            catch (Exception)
+            {
+            }
         }
 
         /// <summary>

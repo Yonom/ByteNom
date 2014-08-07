@@ -126,10 +126,6 @@ namespace ByteNom
             while (this.Connected)
             {
                 var dataMsg = this.ProtoGet<DataMessage>();
-
-                // If we received 0 bytes, the connection is closed
-                if (dataMsg == null) break;
-
                 Message msg = MessageSerializer.Deserialize(dataMsg);
                 this.OnMessageReceived(msg);
             }
@@ -173,9 +169,13 @@ namespace ByteNom
             this.Client.Close();
         }
 
-        internal T ProtoGet<T>()
+        internal T ProtoGet<T>() where T : class
         {
-            return Serializer.DeserializeWithLengthPrefix<T>(this.Stream, PrefixStyle.Base128);
+            var value = Serializer.DeserializeWithLengthPrefix<T>(this.Stream, PrefixStyle.Base128);
+            if (value == null)
+                throw new IOException("The connection was closed.");
+
+            return value;
         }
 
         internal void ProtoSend<T>(T messageObj)

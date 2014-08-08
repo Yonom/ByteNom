@@ -46,6 +46,14 @@ namespace ByteNom
         }
 
         /// <summary>
+        /// Gets the local endpoint for this server.
+        /// </summary>
+        public IPEndPoint Endpoint
+        {
+            get { return (IPEndPoint)this._listener.LocalEndpoint; }
+        }
+
+        /// <summary>
         ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         void IDisposable.Dispose()

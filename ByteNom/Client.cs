@@ -6,7 +6,7 @@ namespace ByteNom
     /// <summary>
     ///     Provides a client connection to a ByteNom server.
     /// </summary>
-    public class Client : Connection
+    public class Client : TcpConnection
     {
         private readonly string _hostname;
         private readonly int _port;

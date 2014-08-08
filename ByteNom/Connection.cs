@@ -17,54 +17,12 @@ namespace ByteNom
         private Thread _thread;
 
         /// <summary>
-        ///     Gets a value indicating whether this <see cref="Connection" /> is connected.
-        /// </summary>
-        /// <value>
-        ///     <c>true</c> if connected; otherwise, <c>false</c>.
-        /// </value>
-        public bool Connected
-        {
-            get
-            {
-                if (this.Client == null)
-                    return false;
-
-                return this.Client.Connected;
-            }
-        }
-
-        /// <summary>
-        ///     Gets the remote end point.
-        /// </summary>
-        /// <value>
-        ///     The remote end point.
-        /// </value>
-        public EndPoint EndPoint
-        {
-            get
-            {
-                if (this.Client == null)
-                    return null;
-
-                return this.Client.Client.RemoteEndPoint;
-            }
-        }
-
-        /// <summary>
-        ///     Gets the tcp client.
-        /// </summary>
-        /// <value>
-        ///     The tcp client.
-        /// </value>
-        protected TcpClient Client { get; private set; }
-
-        /// <summary>
         ///     Gets the network stream.
         /// </summary>
         /// <value>
         ///     The network stream.
         /// </value>
-        protected NetworkStream Stream { get; private set; }
+        protected Stream Stream { get; private set; }
 
         void IDisposable.Dispose()
         {
@@ -73,13 +31,12 @@ namespace ByteNom
         }
 
         /// <summary>
-        ///     Sets the internal tcp client for this connection.
+        ///     Sets the internal stream for this connection.
         /// </summary>
-        /// <param name="client">The client.</param>
-        protected void SetClient(TcpClient client)
+        /// <param name="stream">The stream.</param>
+        protected void SetStream(Stream stream)
         {
-            this.Client = client;
-            this.Stream = client.GetStream();
+            this.Stream = stream;
         }
 
         /// <summary>
@@ -123,7 +80,7 @@ namespace ByteNom
         /// </summary>
         protected virtual void Work()
         {
-            while (this.Connected)
+            while (this.Stream.CanRead)
             {
                 var dataMsg = this.ProtoGet<DataMessage>();
                 Message msg = MessageSerializer.Deserialize(dataMsg);
@@ -151,7 +108,7 @@ namespace ByteNom
 
             try
             {
-                if (!this.Connected) return;
+                if (!this.Stream.CanWrite) return;
                 this.ProtoSend(dataMsg);
             }
             catch (IOException)
@@ -163,10 +120,9 @@ namespace ByteNom
         /// <summary>
         ///     Disconnects from the server.
         /// </summary>
-        public void Disconnect()
+        public virtual void Disconnect()
         {
             this.Stream.Close();
-            this.Client.Close();
         }
 
         internal T ProtoGet<T>() where T : class

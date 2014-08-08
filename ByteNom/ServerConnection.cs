@@ -4,7 +4,7 @@ using ByteNom.Protocol;
 
 namespace ByteNom
 {
-    internal class ServerConnection : Connection
+    internal class ServerConnection : TcpConnection
     {
         public ServerConnection(TcpClient client)
         {

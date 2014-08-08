@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -100,9 +101,12 @@ namespace ByteNom
                     this.OnConnectionReceived(connection);
                     connection.Start();
                 }
-// ReSharper disable once EmptyGeneralCatchClause
-                catch (Exception)
+                catch (SocketException)
                 {
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
                 }
             }
         }
@@ -116,7 +120,7 @@ namespace ByteNom
         ///     Called when a new connection is received.
         /// </summary>
         /// <param name="connection">The connection.</param>
-        protected virtual void OnConnectionReceived(Connection connection)
+        protected virtual void OnConnectionReceived(TcpConnection connection)
         {
             ConnectionEventHandler handler = this.ConnectionReceived;
             if (handler != null) handler(this, connection);

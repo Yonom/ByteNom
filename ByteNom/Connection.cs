@@ -17,26 +17,33 @@ namespace ByteNom
         private Thread _thread;
 
         /// <summary>
+        ///     Gets a value indicating whether this <see cref="Connection" /> is connected.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if connected; otherwise, <c>false</c>.
+        /// </value>
+        public abstract bool Connected { get; }
+
+        /// <summary>
+        ///     Gets the remote end point.
+        /// </summary>
+        /// <value>
+        ///     The remote end point.
+        /// </value>
+        public abstract EndPoint EndPoint { get; }
+
+        /// <summary>
         ///     Gets the network stream.
         /// </summary>
         /// <value>
         ///     The network stream.
         /// </value>
-        protected Stream Stream { get; private set; }
+        protected abstract Stream Stream { get; set; }
 
         void IDisposable.Dispose()
         {
             this.Dispose(true);
             GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        ///     Sets the internal stream for this connection.
-        /// </summary>
-        /// <param name="stream">The stream.</param>
-        protected void SetStream(Stream stream)
-        {
-            this.Stream = stream;
         }
 
         /// <summary>

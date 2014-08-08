@@ -43,6 +43,8 @@
     <Compile Include="Client.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="ConnectionEventHandler.cs" />
+    <Compile Include="TcpConnectionEventHandler.cs" />
+    <Compile Include="IServer.cs" />
     <Compile Include="MessageEventHandler.cs" />
     <Compile Include="Protocol\DataItem.cs">
       <LastGenOutput>DataItem1.cs</LastGenOutput>

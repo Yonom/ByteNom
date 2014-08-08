@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 
 namespace ByteNom
 {
@@ -18,7 +15,7 @@ namespace ByteNom
         /// <value>
         ///     <c>true</c> if connected; otherwise, <c>false</c>.
         /// </value>
-        public bool Connected
+        public override bool Connected
         {
             get
             {
@@ -35,16 +32,24 @@ namespace ByteNom
         /// <value>
         ///     The remote end point.
         /// </value>
-        public IPEndPoint EndPoint
+        public override EndPoint EndPoint
         {
             get
             {
                 if (this.Client == null)
                     return null;
 
-                return (IPEndPoint)this.Client.Client.RemoteEndPoint;
+                return this.Client.Client.RemoteEndPoint;
             }
         }
+
+        /// <summary>
+        ///     Gets the stream.
+        /// </summary>
+        /// <value>
+        ///     The stream.
+        /// </value>
+        protected override Stream Stream { get; set; }
 
         /// <summary>
         ///     Gets the tcp client.
@@ -61,7 +66,7 @@ namespace ByteNom
         protected void SetClient(TcpClient client)
         {
             this.Client = client;
-            this.SetStream(client.GetStream());
+            this.Stream = client.GetStream();
         }
 
         /// <summary>

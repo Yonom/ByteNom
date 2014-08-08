@@ -8,7 +8,7 @@ namespace ByteNom
     /// <summary>
     ///     Listens for ByteNom clients.
     /// </summary>
-    public class Server : IDisposable
+    public class Server : IServer, IDisposable
     {
         private readonly TcpListener _listener;
         private bool _disposed;
@@ -48,9 +48,9 @@ namespace ByteNom
         /// <summary>
         /// Gets the local endpoint for this server.
         /// </summary>
-        public IPEndPoint Endpoint
+        public EndPoint Endpoint
         {
-            get { return (IPEndPoint)this._listener.LocalEndpoint; }
+            get { return this._listener.LocalEndpoint; }
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace ByteNom
         /// <summary>
         ///     Occurs when a new connection is received.
         /// </summary>
-        public event ConnectionEventHandler ConnectionReceived;
+        public event TcpConnectionEventHandler ConnectionReceived;
 
         /// <summary>
         ///     Called when a new connection is received.
@@ -121,8 +121,14 @@ namespace ByteNom
         /// <param name="connection">The connection.</param>
         protected virtual void OnConnectionReceived(TcpConnection connection)
         {
-            ConnectionEventHandler handler = this.ConnectionReceived;
+            TcpConnectionEventHandler handler = this.ConnectionReceived;
             if (handler != null) handler(this, connection);
+        }
+        
+        event ConnectionEventHandler IServer.ConnectionReceived
+        {
+            add { this.ConnectionReceived += new TcpConnectionEventHandler(value); }
+            remove { this.ConnectionReceived += new TcpConnectionEventHandler(value); }
         }
 
         /// <summary>
